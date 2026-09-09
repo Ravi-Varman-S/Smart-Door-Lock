@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Door Lock - Facial Recognition Access Control</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <span class="logo-icon">🔒</span>
+                    <span class="logo-text">Smart Lock</span>
+                </div>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="#" class="nav-item active" data-section="dashboard">
+                    <span class="nav-icon">📊</span>
+                    <span>Dashboard</span>
+                </a>
+                <a href="#" class="nav-item" data-section="access">
+                    <span class="nav-icon">人脸识别</span>
+                    <span>Access Log</span>
+                </a>
+                <a href="#" class="nav-item" data-section="users">
+                    <span class="nav-icon">👥</span>
+                    <span>Users</span>
+                </a>
+                <a href="#" class="nav-item" data-section="settings">
+                    <span class="nav-icon">⚙️</span>
+                    <span>Settings</span>
+                </a>
+            </nav>
+            <div class="sidebar-footer">
+                <div class="device-status">
+                    <span class="status-dot online"></span>
+                    <span>Device Online</span>
+                </div>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <header class="header">
+                <div class="header-left">
+                    <h1 id="pageTitle">Dashboard</h1>
+                    <p class="subtitle">Real-time door monitoring</p>
+                </div>
+                <div class="header-right">
+                    <div class="datetime" id="datetime"></div>
+                    <button class="btn-icon" id="notificationBtn">🔔</button>
+                </div>
+            </header>
+
+            <section id="dashboard" class="section active">
+                <div class="status-cards">
+                    <div class="status-card">
+                        <div class="card-icon">🚪</div>
+                        <div class="card-info">
+                            <h3>Door Status</h3>
+                            <p class="status-value" id="doorStatus">Locked</p>
+                        </div>
+                        <div class="card-indicator locked"></div>
+                    </div>
+                    <div class="status-card">
+                        <div class="card-icon">📷</div>
+                        <div class="card-info">
+                            <h3>Camera</h3>
+                            <p class="status-value">Active</p>
+                        </div>
+                        <div class="card-indicator active"></div>
+                    </div>
+                    <div class="status-card">
+                        <div class="card-icon">👤</div>
+                        <div class="card-info">
+                            <h3>Today's Access</h3>
+                            <p class="status-value" id="todayAccess">24</p>
+                        </div>
+                    </div>
+                    <div class="status-card">
+                        <div class="card-icon">⚠️</div>
+                        <div class="card-info">
+                            <h3>Alerts</h3>
+                            <p class="status-value" id="alertCount">2</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="dashboard-grid">
+                    <div class="camera-feed">
+                        <h3>Live Camera Feed</h3>
+                        <div class="video-container" id="videoContainer">
+                            <div class="video-placeholder">
+                                <div class="face-scan-animation">
+                                    <div class="scan-line"></div>
+                                    <div class="corner tl"></div>
+                                    <div class="corner tr"></div>
+                                    <div class="corner bl"></div>
+                                    <div class="corner br"></div>
+                                </div>
+                                <p>Waiting for face detection...</p>
+                            </div>
+                        </div>
+                        <div class="camera-controls">
+                            <button class="btn btn-primary" id="unlockBtn">
+                                <span>🔓</span> Unlock Door
+                            </button>
+                            <button class="btn btn-danger" id="lockBtn">
+                                <span>🔒</span> Lock Door
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="recent-activity">
+                        <h3>Recent Activity</h3>
+                        <div class="activity-list" id="activityList">
+                            <!-- Activities loaded here -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="access" class="section">
+                <div class="section-header">
+                    <h2>Access Log</h2>
+                    <div class="filters">
+                        <select id="accessFilter">
+                            <option value="all">All Events</option>
+                            <option value="granted">Access Granted</option>
+                            <option value="denied">Access Denied</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="access-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Time</th>
+                                <th>User</th>
+                                <th>Status</th>
+                                <th>Method</th>
+                                <th>Confidence</th>
+                            </tr>
+                        </thead>
+                        <tbody id="accessTableBody">
+                            <!-- Access logs loaded here -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section id="users" class="section">
+                <div class="section-header">
+                    <h2>Registered Users</h2>
+                    <button class="btn btn-primary" id="addUserBtn">+ Add User</button>
+                </div>
+                <div class="users-grid" id="usersGrid">
+                    <!-- Users loaded here -->
+                </div>
+            </section>
+
+            <section id="settings" class="section">
+                <h2>Settings</h2>
+                <div class="settings-grid">
+                    <div class="settings-card">
+                        <h3>🔒 Security Settings</h3>
+                        <div class="setting-item">
+                            <label>Auto-lock Timer</label>
+                            <select id="autoLockTimer">
+                                <option value="5">5 seconds</option>
+                                <option value="10" selected>10 seconds</option>
+                                <option value="30">30 seconds</option>
+                                <option value="60">1 minute</option>
+                            </select>
+                        </div>
+                        <div class="setting-item">
+                            <label>Face Recognition Threshold</label>
+                            <input type="range" id="faceThreshold" min="50" max="100" value="85">
+                            <span id="thresholdValue">85%</span>
+                        </div>
+                        <div class="setting-item">
+                            <label>Intrusion Alerts</label>
+                            <label class="toggle">
+                                <input type="checkbox" id="intrusionAlerts" checked>
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="settings-card">
+                        <h3>📷 Camera Settings</h3>
+                        <div class="setting-item">
+                            <label>Night Vision</label>
+                            <label class="toggle">
+                                <input type="checkbox" id="nightVision">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                        <div class="setting-item">
+                            <label>Recording</label>
+                            <label class="toggle">
+                                <input type="checkbox" id="recording" checked>
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                        <div class="setting-item">
+                            <label>Motion Detection</label>
+                            <label class="toggle">
+                                <input type="checkbox" id="motionDetection" checked>
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="settings-card">
+                        <h3>🔔 Notifications</h3>
+                        <div class="setting-item">
+                            <label>Email Alerts</label>
+                            <label class="toggle">
+                                <input type="checkbox" id="emailAlerts" checked>
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                        <div class="setting-item">
+                            <label>SMS Alerts</label>
+                            <label class="toggle">
+                                <input type="checkbox" id="smsAlerts">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                        <div class="setting-item">
+                            <label>Push Notifications</label>
+                            <label class="toggle">
+                                <input type="checkbox" id="pushNotifications" checked>
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Add User Modal -->
+    <div class="modal" id="addUserModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Add New User</h2>
+                <button class="modal-close" id="closeModal">&times;</button>
+            </div>
+            <form id="addUserForm">
+                <div class="form-group">
+                    <label for="userName">Full Name</label>
+                    <input type="text" id="userName" required>
+                </div>
+                <div class="form-group">
+                    <label for="userRole">Role</label>
+                    <select id="userRole" required>
+                        <option value="family">Family Member</option>
+                        <option value="guest">Guest</option>
+                        <option value="staff">Staff</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Face Capture</label>
+                    <div class="face-capture">
+                        <div class="capture-preview" id="capturePreview">
+                            <span>📷</span>
+                            <p>Click to capture face</p>
+                        </div>
+                        <button type="button" class="btn btn-secondary" id="captureBtn">Capture Face</button>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary btn-full">Add User</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
