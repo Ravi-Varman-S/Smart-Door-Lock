@@ -94,6 +94,19 @@ document.addEventListener('DOMContentLoaded', function() {
         </div>
     `).join('');
 
+    // Today's access counter (persists across visits)
+    let todayAccessCount = parseInt(localStorage.getItem('sdlTodayAccess') || '24', 10);
+    const todayAccessEl = document.getElementById('todayAccess');
+
+    function incrementTodayAccess() {
+        todayAccessCount += 1;
+        localStorage.setItem('sdlTodayAccess', String(todayAccessCount));
+        todayAccessEl.textContent = todayAccessCount;
+    }
+
+    // Count each time the dashboard is accessed
+    incrementTodayAccess();
+
     // Door controls
     let isLocked = true;
     const doorStatus = document.getElementById('doorStatus');
@@ -106,6 +119,7 @@ document.addEventListener('DOMContentLoaded', function() {
         doorStatus.style.color = '#10b981';
         document.querySelector('.card-indicator').className = 'card-indicator active';
         addActivity('Door Unlocked', 'granted');
+        incrementTodayAccess();
     });
 
     lockBtn.addEventListener('click', () => {
