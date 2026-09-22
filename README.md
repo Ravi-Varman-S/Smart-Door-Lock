@@ -48,7 +48,7 @@ Smart-Door-Lock/
 
 ## Live Demo
 
-[View Live Dashboard](https://smart-door-lock.vercel.app)
+[View Live Dashboard](https://smart-door-lock-omega.vercel.app)
 
 ## Author
 
